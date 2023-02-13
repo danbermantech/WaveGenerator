@@ -1,3 +1,5 @@
 out/*
 release
 debug
+.vscode/
+.vs/
