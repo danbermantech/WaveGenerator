@@ -139,7 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Oscillators.cpp" />
     <ClCompile Include="WaveGenerator.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AudioFile.h" />
+    <ClInclude Include="Oscillators.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

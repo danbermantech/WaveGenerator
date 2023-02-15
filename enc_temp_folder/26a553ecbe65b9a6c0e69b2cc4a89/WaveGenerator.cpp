@@ -12,6 +12,20 @@
 #include "AudioFile.h"
 using namespace std;
 
+//const int sampleRate = 44100;
+//const int bitDepth = 16;
+//const int number_of_frequencies = 64;
+
+
+
+//void writeToFile(ofstream& file, int value, int size) {
+//    file.write(reinterpret_cast<const char*> (&value), size);
+//};
+
+//float filter(float sample) {
+//    return sample * sin(sample);
+//}
+
 int makeAWave(vector<float> freqs, std::string cwd) {
     vector<float> frequencyList = freqs;
     OscillatorBank * oscBank = new AdditiveBank({});
@@ -88,10 +102,11 @@ int main(int argc, char* argv[])
     cout << cwd << endl;
     vector<float> argValues;
     if (argc > 1) {
-        for (int i = 1; i < argc; i++) {
-            cout << argv[i] << endl;
-            argValues.push_back(std::strtof(argv[i], NULL));
-        }
+
+    for (int i = 1; i < argc; i++) {
+        cout << argv[i] << endl;
+        argValues.push_back(std::strtof(argv[i], NULL));
+    }
     }
     return makeAWave(argValues, cwd);
 
