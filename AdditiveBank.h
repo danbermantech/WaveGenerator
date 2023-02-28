@@ -1,13 +1,5 @@
 #pragma once
-#define _USE_MATH_DEFINES
-#include <iostream>
-#include <stdlib.h>
-#include <cmath>
-#include <math.h>
-#include <vector>
-#include <string>
 #include "OscillatorBank.h"
-#include "definitions.h"
 using namespace std;
 
 class AdditiveBank : public OscillatorBank {

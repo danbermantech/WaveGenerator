@@ -1,5 +1,7 @@
 out/*
 release
 debug
+*.wav
 .vscode/
 .vs/
+*.exe

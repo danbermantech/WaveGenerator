@@ -2,8 +2,9 @@
 #include <fstream>
 #include <stdlib.h>
 #include <string>
-#include "Oscillators.h"
+#include "definitions.h"
 using namespace std;
+
 
 void writeToFile(ofstream& file, int value, int size) {
     file.write(reinterpret_cast<const char*> (&value), size);
@@ -12,7 +13,7 @@ void writeToFile(ofstream& file, int value, int size) {
 
 class Audiofile {
     ofstream file;
-    int preAudioPosition;
+    int preAudioPosition, postAudioPosition;
     void prepareHeaders() {//header chunk
         file << "RIFF" << "----" << "WAVE";
 
@@ -32,9 +33,9 @@ class Audiofile {
     }
 
     void finalizeHeaders() {
-        int postAudioPosition = file.tellp();
+        postAudioPosition = file.tellp();
 
-        file.seekp(preAudioPosition - 4);
+        file.seekp(postAudioPosition - 4);
         writeToFile(file, postAudioPosition - preAudioPosition, 4);
 
         file.seekp(4, ios::beg);
@@ -43,7 +44,8 @@ class Audiofile {
     }
 public:
     Audiofile(std::string fileName, std::string cwd) {
-        file.open(cwd + "/out/" + fileName + ".wav", ios::binary);
+        cout << "writing to " << cwd << "\\out\\" << fileName << endl;
+        file.open(cwd + "\\out\\" + fileName + ".wav", ios::binary);
         prepareHeaders();
     }
     ~Audiofile() {

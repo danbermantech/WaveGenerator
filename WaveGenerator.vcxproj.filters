@@ -13,20 +13,68 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Oscillators">
+      <UniqueIdentifier>{af3567b7-aef9-4ce3-8444-7f8466ac4703}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\OscillatorBanks">
+      <UniqueIdentifier>{715251d0-4465-443c-bfa7-73f703fb5738}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WaveGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Oscillators.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CotanOscillator.h">
+      <Filter>Header Files\Oscillators</Filter>
+    </ClCompile>
+    <ClCompile Include="csv_parser.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Oscillators.h">
+    <ClInclude Include="Audiofile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioFile.h">
+    <ClInclude Include="standard_tuning_frequencies.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="definitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Oscillator.h">
+      <Filter>Header Files\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="TanOscillator.h">
+      <Filter>Header Files\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="SawOscillator.h">
+      <Filter>Header Files\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="SineOscillator.h">
+      <Filter>Header Files\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="NoiseOscillator.h">
+      <Filter>Header Files\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="HarmonicOscillator.h">
+      <Filter>Header Files\Oscillators</Filter>
+    </ClInclude>
+    <ClInclude Include="AdditiveBank.h">
+      <Filter>Header Files\OscillatorBanks</Filter>
+    </ClInclude>
+    <ClInclude Include="FMBank.h">
+      <Filter>Header Files\OscillatorBanks</Filter>
+    </ClInclude>
+    <ClInclude Include="OscillatorBank.h">
+      <Filter>Header Files\OscillatorBanks</Filter>
+    </ClInclude>
+    <ClInclude Include="requestUserInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="generateFiles.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="csv_parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

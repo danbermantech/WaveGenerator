@@ -8,93 +8,123 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include "oscillators.h"
-#include "AudioFile.h"
+#include "Audiofile.h"
+#include "AdditiveBank.h"
+#include "FMBank.h"
+#include "standard_tuning_frequencies.h"
+#include "requestUserInput.h"
+#include "generateFiles.h"
+#include "csv_parser.h"
 using namespace std;
 
-int makeAWave(vector<float> freqs, std::string cwd) {
-    vector<float> frequencyList = freqs;
-    OscillatorBank * oscBank = new AdditiveBank({});
-    if (frequencyList.size() < 1) {
+static string cwd;
 
-    char addAnother;
-    float input;
-    do {
-        cout << frequencyList.size()+1 << " : " << endl;
-
-        std::string type;
-        cout << "Enter oscillator type ([tan],[sin],[saw]) : ";
-        cin >> type;
-
-        double freq;
-        cout << "Enter frequency : ";
-        cin >> freq;
-
-        double amp;
-        cout << "Enter amplitude : ";
-        cin >> amp;
-
-        cout << endl;
-        oscBank->addOscillator(freq, amp, type);
-        cout << "Add another ? [Y/n]";
-        cin >> addAnother;
-        cout << endl;
-        if(addAnother != 'n'){}
-    } while (addAnother != 'n');
+int makeAWave(){
+    OscillatorBank* oscBank;
+    char genMode = requestUserInput<char>("Enter generator mode ([A]dditive or [F]requency Modulation)", 'a');
+    if (genMode == 'A' || genMode == 'a') {
+        oscBank = new AdditiveBank();
     }
     else {
+        oscBank = new FMBank({});
+    }
+        oscBank->addOscillatorInteractive();
+
+    generateFiles(oscBank, cwd);
+
+    delete oscBank;
+
+    char tryAgain = requestUserInput<char>("Try another? [y/n]", 'y');
+
+    if (tryAgain == 'n' || tryAgain == 'N') {
+        std::cout << "Goodbye!";
+        return 0;
+    }
+    return makeAWave();
+}
+
+int makeAWave(string srcUrl) {
+    cout << "srcUrl route" << endl;
+    OscillatorBank* oscBank;
+    std::ifstream       file(srcUrl);
+    char genMode = requestUserInput<char>("Enter generator mode ([A]dditive or [F]requency Modulation)", 'a');
+    if (genMode == 'A' || genMode == 'a') {
+        oscBank = new AdditiveBank();
+    }
+    else {
+        oscBank = new FMBank({});
+    }
+
+    for (auto& row : CSVRange(file))
+    {
+        cout << "doing a row" << endl;
+        string args = row[0].data();
+        double freq = atof(args.substr(0, args.find(',')).c_str());
+        cout << "freq : " << freq << endl;
+        double amp = atof(args.substr(args.find(',')+1, args.rfind(',')).c_str());
+        cout << "amp : " << amp << endl;
+        double modifier = atof(args.substr(args.rfind(',') + 1, args.size()-1).c_str());
+        cout << "modifier : " << modifier << endl;
+        oscBank->addOscillator(freq, amp, modifier);
+    }
+    generateFiles(oscBank, cwd);
+    cout << "success";
+    delete oscBank;
+    return 0;
+}
+
+int makeAWave(vector<float> freqs) {
+    vector<float> frequencyList = freqs;
+    OscillatorBank* oscBank;
+    char genMode = requestUserInput<char>("Enter generator mode ([A]dditive or [F]requency Modulation)", 'a');
+    if (genMode == 'A' || genMode == 'a') { 
+        oscBank = new AdditiveBank(); 
+    } else {
+        oscBank = new FMBank({});
+    }
+
+    if (frequencyList.size() < 1) {
+        oscBank->addOscillatorInteractive();
+    } else {
         for (int i = 0; i < frequencyList.size(); i++) {
             oscBank->addOscillator(frequencyList[i]);
         }
     }
 
-    auto maxAmplitutde = pow(2, bitDepth - 1) - 1;
-    int duration;
-    string fileName;
-    cout  << "Enter duration (in seconds): ";
-    cin >> duration;
-    cout << "Enter file name: ";
-    cin >> fileName;
-    Audiofile audiofile(fileName, cwd);
+    generateFiles(oscBank, cwd);
 
-    ofstream freqFile;
-    freqFile.open(cwd + "/out/" + fileName + ".txt");
-    for (int i = 0; i < sampleRate * duration; i++) {
-        float sample = oscBank->process();
-        int intSample = static_cast<int> (sample * maxAmplitutde);
-        audiofile.writeSample(intSample);
-    }
-    
-    for (int i = 0; i < oscBank->oscillators.size(); i++) {
-        freqFile << oscBank->oscillators[i]->getFrequency() << "\n";
-    }
+    delete oscBank;
 
-    cout << "Try another? [y/n]: ";
-    char tryAgain = 'n';
-    cin >> tryAgain;
+    char tryAgain = requestUserInput<char>("Try another? [y/n]", 'y');
+
     if (tryAgain == 'n' || tryAgain == 'N') {
-        cout << "Goodbye!";
+        std::cout << "Goodbye!";
         return 0;
     }
-    makeAWave({}, cwd);
-    return 0;
+    return makeAWave();
 }
 
 
 int main(int argc, char* argv[])
 {
-    std::string filePath = argv[0];
-    std::string cwd = filePath.substr(0, filePath.find_last_of("/\\"));
-    cout << cwd << endl;
+    string filePath = argv[0];
+    cwd = filePath.substr(0, filePath.find_last_of("/\\"));
+    std::cout << cwd << endl;
     vector<float> argValues;
-    if (argc > 1) {
+    cout << argc;
+    switch(argc){
+    case(1):
+        return makeAWave();
+    case(2):
+        cout << argv[1] << endl;
+        return makeAWave(argv[1]);
+    default:
         for (int i = 1; i < argc; i++) {
-            cout << argv[i] << endl;
-            argValues.push_back(std::strtof(argv[i], NULL));
+            std::cout << argv[i] << endl;
+            argValues.push_back(strtof(argv[i], NULL));
         }
     }
-    return makeAWave(argValues, cwd);
-
+    return makeAWave(argValues);
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
