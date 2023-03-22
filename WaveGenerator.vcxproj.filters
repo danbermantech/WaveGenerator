@@ -27,9 +27,6 @@
     <ClCompile Include="CotanOscillator.h">
       <Filter>Header Files\Oscillators</Filter>
     </ClCompile>
-    <ClCompile Include="csv_parser.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audiofile.h">

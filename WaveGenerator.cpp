@@ -73,6 +73,37 @@ int makeAWave(string srcUrl) {
     return 0;
 }
 
+int makeAWave(string srcUrl, string outName, float duration, char scale, char mode) {
+    cout << "full definition route" << endl;
+    OscillatorBank* oscBank;
+    std::ifstream       file(srcUrl);
+
+    char genMode = scale ? 'a' : 'f';
+    if (genMode == 'A' || genMode == 'a') {
+        oscBank = new AdditiveBank();
+    }
+    else {
+        oscBank = new FMBank({});
+    }
+
+    for (auto& row : CSVRange(file))
+    {
+        cout << "doing a row" << endl;
+        string args = row[0].data();
+        double freq = atof(args.substr(0, args.find(',')).c_str());
+        cout << "freq : " << freq << endl;
+        double amp = atof(args.substr(args.find(',') + 1, args.rfind(',')).c_str());
+        cout << "amp : " << amp << endl;
+        double modifier = atof(args.substr(args.rfind(',') + 1, args.size() - 1).c_str());
+        cout << "modifier : " << modifier << endl;
+        oscBank->addOscillator(freq, amp, modifier);
+    }
+    generateFiles(oscBank, cwd, outName, duration, scale, mode);
+    cout << "success";
+    delete oscBank;
+    return 0;
+}
+
 int makeAWave(vector<float> freqs) {
     vector<float> frequencyList = freqs;
     OscillatorBank* oscBank;
@@ -105,13 +136,64 @@ int makeAWave(vector<float> freqs) {
 }
 
 
+int parseArgs(int argCount, char* args[]) {
+    //vector<string> argValues;
+    string inputFile = "";
+    string outName = "";
+    float duration = 8;
+    char scale = 's';
+    char mode = 'a';
+
+    for (int i = 1; i < argCount; i++) {
+        char* a = args[i];
+        
+        //std::cout << args[i] << endl;
+        if (a[0] == '-') {
+
+            switch (a[1]) {
+            case('i'):
+                inputFile = args[++i];
+                break;
+            case('o'):
+                outName = args[++i];
+                break;
+            case('d'):
+                duration = stof(args[++i]);
+                break;
+            case('s'):
+                scale = 's';
+                break;
+            case('u'):
+                scale = 'u';
+                break;
+            case('a'):
+                mode = 'a';
+                break;
+            case('m'):
+                mode = 'm';
+                break;
+            default:
+                break;
+            }
+        }
+    }
+    cout << inputFile << endl;
+    cout << duration << endl;
+    cout << outName << endl;
+    cout << scale << endl;
+
+    return makeAWave(inputFile, outName, duration, scale, mode);
+}
+
 int main(int argc, char* argv[])
 {
     string filePath = argv[0];
     cwd = filePath.substr(0, filePath.find_last_of("/\\"));
     std::cout << cwd << endl;
     vector<float> argValues;
-    cout << argc;
+    cout << argc << "args" << endl;
+    parseArgs(argc, argv);
+    return 0;
     switch(argc){
     case(1):
         return makeAWave();

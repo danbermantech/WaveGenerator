@@ -4,11 +4,11 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments>testfreqs.csv</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-i testFreqs.csv  -s -d 8 -o myFreqs</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LocalDebuggerCommandArguments>testfreqs.csv</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>-i testFreqs.csv  -s -d 8 -o myFreqs</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

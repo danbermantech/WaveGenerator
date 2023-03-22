@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CotanOscillator.h" />
-    <ClCompile Include="csv_parser.cpp" />
     <ClCompile Include="WaveGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
